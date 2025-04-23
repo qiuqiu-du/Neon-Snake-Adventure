@@ -1,0 +1,23 @@
+# screen size
+WIDTH, HEIGHT = 800, 600
+SNAKE_BLOCK = 20
+BORDER_WIDTH = 5
+
+# colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+GOLD = (255, 215, 0)
+PURPLE = (128, 0, 128)
+ORANGE = (255, 165, 0)
+CYAN = (0, 255, 255)
+PINK = (255, 192, 203)
+
+# game settings
+SNAKE_SPEED = 15
+FOOD2_LIFETIME = 5
+FOOD3_LIFETIME = 5
+BLINK_START = 3
+
