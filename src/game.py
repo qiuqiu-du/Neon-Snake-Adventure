@@ -1,11 +1,11 @@
 import pygame
 import time
-from buttons import PauseButton
-from food import generate_food
-from snake import get_snake_color
-from ui import UIManager
-from constants import *
-from utils import load_high_score, save_high_score
+from .snake import *
+from .buttons import PauseButton
+from .food import generate_food
+from .ui import UIManager
+from .constants import *
+from .utils import load_high_score, save_high_score
 
 
 class SnakeGame:
@@ -13,8 +13,9 @@ class SnakeGame:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption('Snake Game')
         self.clock = pygame.time.Clock()
-        self.ui_manager = UIManager()  # 添加这行
-        self.pause_button = PauseButton(self.ui_manager)  # 修改这行
+        self.ui_manager = UIManager()
+        self.pause_button = PauseButton(self.ui_manager)
+        self.direction = "RIGHT"
 
     def gameLoop(self):
         game_over = False
@@ -34,7 +35,7 @@ class SnakeGame:
         snake_List = []
         Length_of_snake = 1
 
-        foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food()
+        foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time)
 
         self.ui_manager.show_start_screen(self.screen)
 
@@ -118,9 +119,10 @@ class SnakeGame:
                 continue
 
             if game_active:
-                elapsed_time = int(time.time() - start_time)
+                elapsed_time = time.time() - start_time
 
-            if x1 >= WIDTH - BORDER_WIDTH or x1 < BORDER_WIDTH or y1 >= HEIGHT - BORDER_WIDTH or y1 < BORDER_WIDTH:
+            if (x1 + SNAKE_BLOCK/2 >= WIDTH - BORDER_WIDTH or x1 + SNAKE_BLOCK/2 < BORDER_WIDTH
+                    or y1+ SNAKE_BLOCK/2 >= HEIGHT - BORDER_WIDTH or y1+ SNAKE_BLOCK/2 < BORDER_WIDTH):
                 game_close = True
             x1 += x1_change
             y1 += y1_change
@@ -133,13 +135,13 @@ class SnakeGame:
             food_should_draw = True
 
             if food_lifetime:
-                time_remaining = food_lifetime - (current_time - food_spawn_time)
+                time_remaining = food_lifetime - (elapsed_time - food_spawn_time)
 
                 if time_remaining <= 0:
-                    foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food()
+                    foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time)
                 elif time_remaining <= BLINK_START:
                     # Blink during last 3 seconds (toggle visibility every second)
-                    food_should_draw = int(current_time * 2) % 2 == 0
+                    food_should_draw = int(elapsed_time * 2) % 2 == 0
 
             # Only draw food if it should be visible
             if food_should_draw:
@@ -154,9 +156,22 @@ class SnakeGame:
                 if x == snake_Head:
                     game_close = True
 
+            if x1_change > 0:
+                self.direction = "RIGHT"
+            elif x1_change < 0:
+                self.direction = "LEFT"
+            elif y1_change < 0:
+                self.direction = "UP"
+            elif y1_change > 0:
+                self.direction = "DOWN"
+
             snake_color = get_snake_color(current_score)
-            for x in snake_List:
+            near_food = is_near_food(x1, y1, foodx, foody)
+            draw_snake_head(self.screen, snake_Head[0], snake_Head[1],
+                          self.direction, snake_color, near_food)
+            for x in snake_List[:-1]:
                 pygame.draw.rect(self.screen, snake_color, [x[0], x[1], SNAKE_BLOCK, SNAKE_BLOCK])
+
 
             if x1 == foodx and y1 == foody:
                 Length_of_snake += food_value
@@ -164,9 +179,9 @@ class SnakeGame:
                 if current_score > high_score:
                     high_score = current_score
                     save_high_score(high_score)
-                foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food()
+                foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time)
 
-            time_text = self.ui_manager.small_font.render(f"Time: {elapsed_time}s", True, WHITE)
+            time_text = self.ui_manager.small_font.render(f"Time: {int(elapsed_time)}s", True, WHITE)
             score_text = self.ui_manager.small_font.render(f"Score: {current_score}  High Score: {high_score}", True, WHITE)
             self.screen.blit(time_text, [10, 10])
             self.screen.blit(score_text, [WIDTH / 2 - score_text.get_width() / 2, 10])
