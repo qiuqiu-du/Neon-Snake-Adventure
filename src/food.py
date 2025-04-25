@@ -1,12 +1,16 @@
 import random
 import time
-from constants import *
 
-def generate_food():
+from .constants import *
+
+def generate_food(game_spawn_time = None):
     food_type = random.random()
     x = round(random.randrange(BORDER_WIDTH + SNAKE_BLOCK, WIDTH - BORDER_WIDTH - SNAKE_BLOCK * 2) / SNAKE_BLOCK) * SNAKE_BLOCK
     y = round(random.randrange(BORDER_WIDTH + SNAKE_BLOCK, HEIGHT - BORDER_WIDTH - SNAKE_BLOCK * 2) / SNAKE_BLOCK) * SNAKE_BLOCK
-    spawn_time = time.time()
+    if game_spawn_time is None:
+        spawn_time = time.time()
+    else:
+        spawn_time = game_spawn_time
 
     if food_type <= 0.85:
         return (x, y, GREEN, 1, spawn_time, None)
