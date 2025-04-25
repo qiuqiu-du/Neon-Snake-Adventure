@@ -1,8 +1,10 @@
 import pygame
-from game import SnakeGame
+from src.game import SnakeGame
+from src.utils import set_english_input
 
 def main():
     pygame.init()
+    set_english_input()
     game = SnakeGame()
     game.gameLoop()
 

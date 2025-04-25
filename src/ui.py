@@ -1,6 +1,6 @@
 import pygame
-from constants import *
-from utils import load_high_score  # 新增导入
+from .constants import *
+from .utils import load_high_score  # 新增导入
 
 
 class UIManager:
