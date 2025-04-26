@@ -28,7 +28,7 @@ def save_game_result(score, elapsed_time, difficulty):
         # Create new entry
         entry = {
             "score": score,
-            "time": int(elapsed_time),
+            "time": float(f"{elapsed_time:.4f}"),
             "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "difficulty": difficulty
         }
