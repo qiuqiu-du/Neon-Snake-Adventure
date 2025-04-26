@@ -5,7 +5,6 @@
 
 A modern reimagining of the classic Snake arcade game built with Python and Pygame, featuring vibrant visuals and enhanced gameplay mechanics.
 
-[//]: # (![Gameplay Demo]&#40;screenshot.gif&#41;)
 
 ## ✨ Features
 
@@ -13,14 +12,18 @@ A modern reimagining of the classic Snake arcade game built with Python and Pyga
   Snake color evolves based on score with rainbow gradient effects
 - **Special Food Types**  
   - 🟢 Green: +1 point  
-  - 🔵 Blue: +2 points (rare)  
+  - 🔵 Blue: +2 points (rare, time-limited)  
   - 🟡 Gold: +5 points (epic, time-limited)
-- **Game Enhancements**  
-  - ⏱️ Live timer & persistent high scores  
-  - ⏯️ Clickable pause button + keyboard controls  
-
+- **Dual Difficulty System**
+  - 🟢 Easy Mode: Slower gameplay for beginners
+  - 🔥 Hard Mode: Faster speed with competitive scoring 
+- **Comprehensive Leaderboards**
+  - 📊 Score, Time, and Date tracking
+  - 🏆 Separate rankings for each difficulty
+  - 🕒 Chronological performance history
 - **Customizable**  
   Easily modify game settings via `constants.py`
+
 
 ## 🛠️ Installation
 
@@ -65,7 +68,7 @@ A modern reimagining of the classic Snake arcade game built with Python and Pyga
 
 Want to contribute? Here are ideas:
 - Add sound effects
-- Implement game levels
+- Add power-up items
 - Create obstacle system
 - Add multiplayer mode
 
