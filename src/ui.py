@@ -44,7 +44,7 @@ class UIManager:
             screen.fill(BLACK)
 
             # Draw title and other start screen elements
-            self.message(screen, "SNAKE GAME", GREEN, -80, self.large_font)
+            self.message(screen, "Neon Snake Adventure", GREEN, -80, self.large_font)
             self.message(screen, "Press SPACE to Start", WHITE, 40, self.medium_font)
 
             # Draw the buttons
@@ -110,12 +110,12 @@ class UIManager:
             # Draw entries (centered in their columns)
             for i, entry in enumerate(easy_entries):
                 # Create text surfaces with fixed formatting
-                score_text = self.small_font.render(f"{entry['score']:5d}", True, WHITE)  # 5-digit score
+                score_text = self.small_font.render(f"{entry['score']:2d}", True, WHITE)  # 5-digit score
                 time_text = self.small_font.render(f"{entry['time']:4.1f}s", True, WHITE)  # 4.1f format
                 date_text = self.small_font.render(entry['date'], True, WHITE)
 
                 # Calculate positions with center alignment
-                screen.blit(score_text, (base_x + (col_widths[0] - 1.3 * score_text.get_width()) // 2, 200 + i * 30))
+                screen.blit(score_text, (base_x + (col_widths[0] - score_text.get_width()) // 2, 200 + i * 30))
                 screen.blit(time_text, (base_x + col_widths[0] + (col_widths[1] - time_text.get_width()) // 2, 200 + i * 30))
                 screen.blit(date_text, (base_x + col_widths[0] + col_widths[1] + (col_widths[2] - date_text.get_width()) // 2, 200 + i * 30))
 
@@ -134,11 +134,11 @@ class UIManager:
 
             # Draw hard entries
             for i, entry in enumerate(hard_entries):
-                score_text = self.small_font.render(f"{entry['score']:5d}", True, WHITE)
+                score_text = self.small_font.render(f"{entry['score']:2d}", True, WHITE)
                 time_text = self.small_font.render(f"{entry['time']:4.1f}s", True, WHITE)
                 date_text = self.small_font.render(entry['date'], True, WHITE)
 
-                screen.blit(score_text, (hard_base_x + (col_widths[0] - 1.3* score_text.get_width()) // 2, 200 + i * 30))
+                screen.blit(score_text, (hard_base_x + (col_widths[0] - score_text.get_width()) // 2, 200 + i * 30))
                 screen.blit(time_text, (hard_base_x + col_widths[0] + (col_widths[1] - time_text.get_width()) // 2, 200 + i * 30))
                 screen.blit(date_text, (hard_base_x + col_widths[0] + col_widths[1] + (col_widths[2] - date_text.get_width()) // 2, 200 + i * 30))
 
