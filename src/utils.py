@@ -1,16 +1,53 @@
 import ctypes
+import json
+from datetime import datetime
 
-def load_high_score():
+
+def load_high_score(difficulty="hard"):
     try:
-        with open("highscore.txt", "r") as f:
-            return int(f.read())
+        with open("leaderboard.json", "r") as f:
+            leaderboard_data = json.load(f)
+            scores = [entry["score"] for entry in leaderboard_data.get(difficulty, [])]
+            return max(scores) if scores else 0
     except:
         return 0
 
 
-def save_high_score(score):
-    with open("highscore.txt", "w") as f:
-        f.write(str(score))
+def save_game_result(score, elapsed_time, difficulty):
+    try:
+        # Load existing data or initialize if file doesn't exist
+        try:
+            with open("leaderboard.json", "r") as f:
+                leaderboard_data = json.load(f)
+        except:
+            leaderboard_data = {
+                "easy": [],
+                "hard": []
+            }
+
+        # Create new entry
+        entry = {
+            "score": score,
+            "time": int(elapsed_time),
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "difficulty": difficulty
+        }
+
+        # Add entry to the appropriate difficulty list
+        leaderboard_data[difficulty].append(entry)
+
+        # Save with improved formatting
+        with open("leaderboard.json", "w") as f:
+            json.dump(
+                leaderboard_data,
+                f,
+                indent=4,  # 4-space indentation
+                ensure_ascii=False,  # Preserve non-ASCII characters
+                sort_keys=True  # Sort dictionary keys alphabetically
+            )
+
+    except Exception as e:
+        print(f"Error saving game result: {e}")
 
 
 def set_english_input():
