@@ -57,6 +57,10 @@ class UIManager:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit(0)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        pygame.quit()
+                        sys.exit(0)
 
                 # Handle button clicks
                 if self.settings_button.is_clicked(event):
@@ -150,6 +154,10 @@ class UIManager:
                     sys.exit(0)
                 if back_button.is_clicked(event):
                     running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        pygame.quit()
+                        sys.exit(0)
 
     def show_settings_screen(self, screen):
         # Create UI elements
@@ -198,6 +206,10 @@ class UIManager:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit(0)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        pygame.quit()
+                        sys.exit(0)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if back_button.is_clicked(event):
                         running = False
