@@ -54,6 +54,9 @@ class SnakeGame:
                         start_time += time.time() - pause_time
 
                 if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        game_over = True
+
                     if game_active and not game_close and event.key == pygame.K_p:
                         paused = not paused
                         if paused:
@@ -91,6 +94,8 @@ class SnakeGame:
                         elif event.key == pygame.K_DOWN and y1_change == 0:
                             y1_change = SNAKE_BLOCK
                             x1_change = 0
+                        elif event.key == pygame.K_c:
+                            return self.gameLoop()
 
                     elif game_close:
                         if event.key == pygame.K_q:
