@@ -1,7 +1,7 @@
 import pygame
 import json
+import sys
 from .constants import *
-from .utils import load_high_score
 from .buttons import SettingsButton, LeaderboardButton, BackButton
 
 
@@ -56,7 +56,7 @@ class UIManager:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    exit()
+                    sys.exit(0)
 
                 # Handle button clicks
                 if self.settings_button.is_clicked(event):
@@ -147,7 +147,7 @@ class UIManager:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    exit()
+                    sys.exit(0)
                 if back_button.is_clicked(event):
                     running = False
 
@@ -197,7 +197,7 @@ class UIManager:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    exit()
+                    sys.exit(0)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if back_button.is_clicked(event):
                         running = False

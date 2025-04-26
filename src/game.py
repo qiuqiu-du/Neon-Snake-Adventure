@@ -1,4 +1,4 @@
-import pygame
+import sys
 import time
 from .snake import *
 from .buttons import PauseButton
@@ -11,7 +11,6 @@ from .utils import *
 class SnakeGame:
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption('Snake Game')
         self.clock = pygame.time.Clock()
         self.ui_manager = UIManager()
         self.pause_button = PauseButton(self.ui_manager)
@@ -45,7 +44,7 @@ class SnakeGame:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    exit()
+                    sys.exit(0)
 
                 if self.pause_button.is_clicked(event):
                     paused = not paused
@@ -198,4 +197,4 @@ class SnakeGame:
             self.clock.tick(game_speed)
 
         pygame.quit()
-        exit()
+        sys.exit(0)

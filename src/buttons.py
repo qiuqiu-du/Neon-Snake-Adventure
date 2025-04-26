@@ -1,5 +1,6 @@
 import pygame
 from .constants import *
+import os
 
 class PauseButton:
     def __init__(self, ui_manager):
@@ -37,8 +38,9 @@ class SettingsButton:
         self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
         self.color = (50, 50, 50)
         self.hover_color = (100, 100, 100)
-
-        original_img = pygame.image.load("assets/gear_icon.png").convert_alpha()
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        icon_path = os.path.join(base_path, 'assets', 'gear_icon.png')
+        original_img = pygame.image.load(icon_path).convert_alpha()
         self.gear_image = pygame.transform.smoothscale(
             original_img,
             (self.size - 5, self.size - 5))
