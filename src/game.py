@@ -136,7 +136,6 @@ class SnakeGame:
             self.ui_manager.draw_border(self.screen, get_snake_color(current_score))
 
             # check if the food should blink
-            current_time = time.time()
             food_should_draw = True
 
             if self.ui_manager.difficulty =="hard":
@@ -151,7 +150,7 @@ class SnakeGame:
 
             # Only draw food if it should be visible
             if food_should_draw:
-                pygame.draw.rect(self.screen, food_color, [foodx, foody, SNAKE_BLOCK, SNAKE_BLOCK])
+                pygame.draw.ellipse(self.screen, food_color, [foodx, foody, SNAKE_BLOCK, SNAKE_BLOCK])
 
             snake_Head = [x1, y1]
             snake_List.append(snake_Head)
@@ -188,7 +187,7 @@ class SnakeGame:
                 foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time)
 
             time_text = self.ui_manager.small_font.render(f"Time: {int(elapsed_time)}s", True, WHITE)
-            score_text = self.ui_manager.small_font.render(f"Score: {current_score}  High Score: {high_score}  easy", True, WHITE)
+            score_text = self.ui_manager.small_font.render(f"Score: {current_score}  High Score: {high_score}", True, WHITE)
             self.screen.blit(time_text, [10, 10])
             self.screen.blit(score_text, [WIDTH / 2 - score_text.get_width() / 2, 10])
 

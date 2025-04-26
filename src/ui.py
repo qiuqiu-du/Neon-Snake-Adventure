@@ -154,9 +154,8 @@ class UIManager:
     def show_settings_screen(self, screen):
         # Create UI elements
         checkbox_size = 20
-        checkbox_y_offset = -15  # 微调垂直对齐
+        checkbox_y_offset = -15
 
-        # 计算水平居中位置（将复选框和文字视为一个整体）
         easy_x = WIDTH // 2 - (checkbox_size + 10 + self.font.size("Easy")[0]) // 2
         hard_x = WIDTH // 2 - (checkbox_size + 10 + self.font.size("Hard")[0]) // 2
 
@@ -190,7 +189,6 @@ class UIManager:
                 pygame.draw.rect(screen, GREEN, (hard_checkbox.x + 3, hard_checkbox.y + 3,
                                                  hard_checkbox.width - 6, hard_checkbox.height - 6))
 
-            # 文字位置与复选框水平居中
             screen.blit(easy_text, (easy_checkbox.x + checkbox_size + 30, easy_checkbox.y + checkbox_y_offset))
             screen.blit(hard_text, (hard_checkbox.x + checkbox_size + 30, hard_checkbox.y + checkbox_y_offset))
 
