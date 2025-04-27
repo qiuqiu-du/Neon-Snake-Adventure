@@ -129,6 +129,7 @@ class SnakeGame:
             if game_active:
                 elapsed_time = time.time() - start_time
 
+            # collide tha wall
             if (x1 + SNAKE_BLOCK/2 >= WIDTH - BORDER_WIDTH or x1 + SNAKE_BLOCK/2 < BORDER_WIDTH
                     or y1+ SNAKE_BLOCK/2 >= HEIGHT - BORDER_WIDTH or y1+ SNAKE_BLOCK/2 < BORDER_WIDTH):
                 save_game_result(current_score, elapsed_time, self.ui_manager.difficulty)
@@ -161,8 +162,10 @@ class SnakeGame:
             if len(snake_List) > Length_of_snake:
                 del snake_List[0]
 
+            # collide itself
             for x in snake_List[:-1]:
                 if x == snake_Head:
+                    save_game_result(current_score, elapsed_time, self.ui_manager.difficulty)
                     game_close = True
 
             if x1_change > 0:
