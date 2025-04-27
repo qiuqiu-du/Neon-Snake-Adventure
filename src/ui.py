@@ -3,6 +3,7 @@ import json
 import sys
 from .constants import *
 from .buttons import SettingsButton, LeaderboardButton, BackButton
+from .utils import decrypt_data
 
 
 class UIManager:
@@ -94,8 +95,8 @@ class UIManager:
 
             # Load leaderboard data
             try:
-                with open("leaderboard.json", "r") as f:
-                    leaderboard_data = json.load(f)
+                with open("leaderboard.enc", "rb") as f:
+                    leaderboard_data = decrypt_data(f.read())
             except:
                 leaderboard_data = {"easy": [], "hard": []}
 
