@@ -1,50 +1,63 @@
 import ctypes
+import base64
 import json
+import os
+from cryptography.fernet import Fernet
 from datetime import datetime
 
+FERNET_KEY = b'sDPp3RHHsVXY_IqpMNKR5jKXB9QmIWn56hINrpbP-ys='  # 示例密钥，应替换为安全密钥
+cipher_suite = Fernet(FERNET_KEY)
+
+
+def encrypt_data(data: dict) -> bytes:
+    """encrypt data"""
+    return cipher_suite.encrypt(json.dumps(data).encode('utf-8'))
+
+def decrypt_data(encrypted: bytes) -> dict:
+    """decrypt data"""
+    return json.loads(cipher_suite.decrypt(encrypted).decode('utf-8'))
 
 def load_high_score(difficulty="hard"):
+    """加载指定难度的最高分（带简单加密）"""
     try:
-        with open("leaderboard.json", "r") as f:
-            leaderboard_data = json.load(f)
-            scores = [entry["score"] for entry in leaderboard_data.get(difficulty, [])]
-            return max(scores) if scores else 0
-    except:
-        return 0
+        if os.path.exists("leaderboard.enc"):
+            with open("leaderboard.enc", "rb") as f:
+                encrypted_data = f.read()
+                leaderboard_data = decrypt_data(encrypted_data)
+                scores = [entry["score"] for entry in leaderboard_data.get(difficulty, [])]
+                return max(scores) if scores else 0
+        else:
+            return 0
+    except Exception as e:
+        print(f"Error loading high score: {e}")
+    return 0
+
 
 
 def save_game_result(score, elapsed_time, difficulty):
+    """保存游戏结果（带简单加密）"""
     try:
-        # Load existing data or initialize if file doesn't exist
+        # 加载或初始化数据
         try:
-            with open("leaderboard.json", "r") as f:
-                leaderboard_data = json.load(f)
+            with open("leaderboard.enc", "rb") as f:
+                leaderboard_data = decrypt_data(f.read())
         except:
-            leaderboard_data = {
-                "easy": [],
-                "hard": []
-            }
+            leaderboard_data = {"easy": [], "hard": []}
 
-        # Create new entry
-        entry = {
+        # 创建新记录
+        new_entry = {
             "score": score,
             "time": float(f"{elapsed_time:.4f}"),
             "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "difficulty": difficulty
         }
 
-        # Add entry to the appropriate difficulty list
-        leaderboard_data[difficulty].append(entry)
+        # 更新数据
+        leaderboard_data[difficulty].append(new_entry)
 
-        # Save with improved formatting
-        with open("leaderboard.json", "w") as f:
-            json.dump(
-                leaderboard_data,
-                f,
-                indent=4,  # 4-space indentation
-                ensure_ascii=False,  # Preserve non-ASCII characters
-                sort_keys=True  # Sort dictionary keys alphabetically
-            )
+        # 加密保存
+        with open("leaderboard.enc", "wb") as f:
+            f.write(encrypt_data(leaderboard_data))
 
     except Exception as e:
         print(f"Error saving game result: {e}")
