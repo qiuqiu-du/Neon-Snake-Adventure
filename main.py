@@ -1,6 +1,5 @@
 import pygame
 import os
-import sys
 from src.game import SnakeGame
 from src.utils import set_english_input
 

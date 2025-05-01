@@ -2,3 +2,4 @@
 /output/
 /leaderboard.json
 /leaderboard.enc
+__pycache__

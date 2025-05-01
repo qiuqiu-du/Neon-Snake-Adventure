@@ -1,5 +1,4 @@
 import pygame
-import json
 import sys
 from .constants import *
 from .buttons import SettingsButton, LeaderboardButton, BackButton
