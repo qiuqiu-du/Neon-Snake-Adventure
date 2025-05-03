@@ -3,6 +3,8 @@ import sys
 from .constants import *
 from .buttons import SettingsButton, LeaderboardButton, BackButton
 from .utils import decrypt_data
+from .demo import BackgroundGame
+
 
 
 class UIManager:
@@ -39,9 +41,12 @@ class UIManager:
         pygame.draw.rect(screen, color, [WIDTH - BORDER_WIDTH, 0, BORDER_WIDTH, HEIGHT])
 
     def show_start_screen(self, screen):
+        bg_game = BackgroundGame(screen, self,)
+
         running = True
         while running:
-            screen.fill(BLACK)
+            bg_game.update()
+            bg_game.draw()
 
             # Draw title and other start screen elements
             self.message(screen, "Neon Snake Adventure", GREEN, -80, self.large_font)
