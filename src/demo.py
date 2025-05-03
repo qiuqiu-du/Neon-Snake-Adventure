@@ -19,8 +19,8 @@ class BackgroundGame:
         self.min_direction_duration = 0.1  # Minimum time to keep same direction (seconds)
 
     def reset_game(self):
-        self.x1 = WIDTH // 2
-        self.y1 = HEIGHT // 2
+        self.x1 = round(random.randrange(0, WIDTH - SNAKE_BLOCK) / SNAKE_BLOCK) * SNAKE_BLOCK
+        self.y1 = round(random.randrange(0, HEIGHT - SNAKE_BLOCK) / SNAKE_BLOCK) * SNAKE_BLOCK
         self.x1_change = SNAKE_BLOCK
         self.y1_change = 0
         self.snake_List = []
@@ -41,7 +41,7 @@ class BackgroundGame:
 
         # AI decision making - more human-like algorithm
         if self.game_active:
-            possible_moves = self.get_possible_moves()
+            possible_moves = self.get_possible_moves(self.direction)
             best_move = self.choose_best_move(possible_moves)
 
             # Only change direction if it's safe and better
@@ -97,22 +97,24 @@ class BackgroundGame:
 
 
 
-    def get_possible_moves(self):
+    def get_possible_moves(self,current_direction):
         moves = []
         # Check if moves are valid (won't hit wall or self)
         # Left
-        if self.x1 + SNAKE_BLOCK / 2 - SNAKE_BLOCK >= 0 and [self.x1 - SNAKE_BLOCK, self.y1] not in self.snake_List[:-1]:
+        if (self.x1 + SNAKE_BLOCK / 2 - SNAKE_BLOCK >= 0 and [self.x1 - SNAKE_BLOCK, self.y1] not in self.snake_List[:-1]
+                and current_direction != "RIGHT"):
             moves.append("LEFT")
         # Right
-        if self.x1 + SNAKE_BLOCK / 2 + SNAKE_BLOCK < WIDTH and [self.x1 + SNAKE_BLOCK, self.y1] not in self.snake_List[
-                                                                                                    :-1]:
+        if (self.x1 + SNAKE_BLOCK / 2 + SNAKE_BLOCK < WIDTH and [self.x1 + SNAKE_BLOCK, self.y1] not in self.snake_List[:-1]
+                and current_direction != "LEFT"):
             moves.append("RIGHT")
         # Up
-        if self.y1 + SNAKE_BLOCK / 2  - SNAKE_BLOCK >= 0 and [self.x1, self.y1 - SNAKE_BLOCK] not in self.snake_List[:-1]:
+        if (self.y1 + SNAKE_BLOCK / 2  - SNAKE_BLOCK >= 0 and [self.x1, self.y1 - SNAKE_BLOCK] not in self.snake_List[:-1]
+                and current_direction != "DOWN"):
             moves.append("UP")
         # Down
-        if self.y1 + SNAKE_BLOCK / 2  + SNAKE_BLOCK < HEIGHT and [self.x1, self.y1 + SNAKE_BLOCK] not in self.snake_List[
-                                                                                                     :-1]:
+        if (self.y1 + SNAKE_BLOCK / 2  + SNAKE_BLOCK < HEIGHT and [self.x1, self.y1 + SNAKE_BLOCK] not in self.snake_List[:-1]
+                and current_direction != "UP"):
             moves.append("DOWN")
 
         return moves if moves else ["LEFT", "RIGHT", "UP", "DOWN"]  # If no safe moves, return all (will die)
