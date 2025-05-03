@@ -2,7 +2,7 @@ import pygame
 import sys
 from .constants import *
 from .buttons import SettingsButton, LeaderboardButton, BackButton
-from .utils import decrypt_data
+from .utils import decrypt_data, create_gradient_text
 from .demo import BackgroundGame
 
 
@@ -15,6 +15,7 @@ class UIManager:
             self.small_font = pygame.font.SysFont("arial", 20)
             self.medium_font = pygame.font.SysFont("arial", 30)
             self.large_font = pygame.font.SysFont("arial", 50)
+            self.title_font = pygame.font.SysFont("Bauhaus 93", 60)
         except:
             self.font = pygame.font.SysFont(None, 40)
             self.small_font = pygame.font.SysFont(None, 20)
@@ -41,18 +42,30 @@ class UIManager:
         pygame.draw.rect(screen, color, [WIDTH - BORDER_WIDTH, 0, BORDER_WIDTH, HEIGHT])
 
     def show_start_screen(self, screen):
-        bg_game = BackgroundGame(screen, self,)
+        bg_game = BackgroundGame(screen, self)
+
+        # Pre-render title parts
+        neon_text = create_gradient_text("Neon Snake Adventure", [255, 0, 150], [50, 0, 255], self.title_font)
+        # adventure_text = self.large_font.render(" Adventure", True, HOT_PINK)
+
+        # Calculate total width for centering
+        total_width = neon_text.get_width()
 
         running = True
         while running:
             bg_game.update()
             bg_game.draw()
 
-            # Draw title and other start screen elements
-            self.message(screen, "Neon Snake Adventure", GREEN, -80, self.large_font)
+            # Draw title with gradient effect
+            title_x = WIDTH // 2 - total_width // 2
+            title_y = HEIGHT // 2 - 80
+            screen.blit(neon_text, (title_x, title_y))
+            # screen.blit(adventure_text, (title_x + neon_text.get_width(), title_y))
+
+            # Draw start prompt
             self.message(screen, "Press SPACE to Start", WHITE, 40, self.medium_font)
 
-            # Draw the buttons
+            # Draw buttons
             self.settings_button.draw(screen)
             self.leaderboard_button.draw(screen)
 

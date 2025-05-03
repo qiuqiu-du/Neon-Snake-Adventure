@@ -1,5 +1,5 @@
 import ctypes
-import base64
+import pygame
 import json
 import os
 from cryptography.fernet import Fernet
@@ -80,3 +80,21 @@ def set_english_input():
             ctypes.windll.user32.keybd_event(0xA0, 0, 2, 0)
         except:
             pass
+
+def create_gradient_text(text, start_color, end_color, font):
+    """Create text surface with per-character gradient effect"""
+    gradient_surface = pygame.Surface((font.size(text)[0], font.size(text)[1]), pygame.SRCALPHA)
+
+    for i, char in enumerate(text):
+        # Calculate color interpolation
+        ratio = i / (len(text) - 1) if len(text) > 1 else 0.5
+        r = start_color[0] + (end_color[0] - start_color[0]) * ratio
+        g = start_color[1] + (end_color[1] - start_color[1]) * ratio
+        b = start_color[2] + (end_color[2] - start_color[2]) * ratio
+        color = (int(r), int(g), int(b))
+
+        # Render each character separately
+        char_surface = font.render(char, True, color)
+        gradient_surface.blit(char_surface, (font.size(text[:i])[0], 0))
+
+    return gradient_surface

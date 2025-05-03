@@ -4,11 +4,13 @@ import pygame
 def get_snake_color(score):
     color_steps = [
         (0, WHITE),
-        (15, PURPLE),
-        (30, ORANGE),
-        (45, CYAN),
-        (60, PINK),
-        (75, GOLD)
+        (15, CYAN),
+        (30, NEON_BLUE),
+        (45, LIME_GREEN),
+        (60, NEON_YELLOW),
+        (75, NEON_ORANGE),
+        (90, NEON_PINK),
+        (105, ELECTRIC_BLUE),
     ]
     for threshold, color in reversed(color_steps):
         if score >= threshold:
