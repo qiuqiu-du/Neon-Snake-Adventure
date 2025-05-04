@@ -34,3 +34,5 @@ BLINK_START = 3
 # Difficulty settings
 EASY_SPEED = 13
 HARD_SPEED = 15
+
+REFRESH_SPEED = 60

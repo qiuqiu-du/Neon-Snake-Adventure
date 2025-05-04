@@ -6,7 +6,7 @@ from .snake import draw_snake_head, is_near_food, get_snake_color
 from .food import generate_food
 
 class BackgroundGame:
-    def __init__(self, screen, ui_manager, difficulty="easy"):
+    def __init__(self, screen, ui_manager, difficulty="hard"):
         self.screen = screen
         self.ui_manager = ui_manager
         self.difficulty = difficulty

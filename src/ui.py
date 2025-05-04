@@ -8,7 +8,7 @@ from .demo import BackgroundGame
 
 
 class UIManager:
-    def __init__(self):
+    def __init__(self,  shared_clock):
         # Initialize fonts
         try:
             self.font = pygame.font.SysFont("arial", 40)
@@ -28,6 +28,7 @@ class UIManager:
 
         # Initialize difficulty (default to hard)
         self.difficulty = "hard"
+        self.clock = shared_clock
 
     def message(self, screen, msg, color, y_offset=0, font = None):
         if font is None:
@@ -70,6 +71,7 @@ class UIManager:
             self.leaderboard_button.draw(screen)
 
             pygame.display.update()
+            self.clock.tick(REFRESH_SPEED)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -165,6 +167,7 @@ class UIManager:
                 screen.blit(date_text, (hard_base_x + col_widths[0] + col_widths[1] + (col_widths[2] - date_text.get_width()) // 2, 200 + i * 30))
 
             pygame.display.update()
+            self.clock.tick(REFRESH_SPEED)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -219,6 +222,7 @@ class UIManager:
             screen.blit(hard_text, (hard_checkbox.x + checkbox_size + 30, hard_checkbox.y + checkbox_y_offset))
 
             pygame.display.update()
+            self.clock.tick(REFRESH_SPEED)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

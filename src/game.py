@@ -12,7 +12,7 @@ class SnakeGame:
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
-        self.ui_manager = UIManager()
+        self.ui_manager = UIManager(self.clock)
         self.pause_button = PauseButton(self.ui_manager)
         self.direction = "RIGHT"
 
@@ -112,6 +112,7 @@ class SnakeGame:
                     self.ui_manager.message(self.screen, "New Record !", GOLD, 140,
                                             self.ui_manager.medium_font)
                 pygame.display.update()
+                self.clock.tick(REFRESH_SPEED)
                 continue
 
             if paused:
@@ -124,6 +125,7 @@ class SnakeGame:
                 self.screen.blit(continue_text, [WIDTH / 2 - continue_text.get_width() / 2, HEIGHT / 2 + 30])
                 self.pause_button.draw(self.screen, paused)
                 pygame.display.update()
+                self.clock.tick(REFRESH_SPEED)
                 continue
 
             if game_active:
