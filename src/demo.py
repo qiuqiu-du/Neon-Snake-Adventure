@@ -2,7 +2,7 @@ import time
 import random
 import pygame
 from .constants import *
-from .snake import draw_snake_head, is_near_food, get_snake_color
+from .snake import draw_snake_head,draw_snake_body, is_near_food, get_snake_color
 from .food import generate_food
 
 class BackgroundGame:
@@ -78,14 +78,14 @@ class BackgroundGame:
                 return
 
             # Update snake body
-            snake_Head = [self.x1, self.y1]
+            snake_Head = [self.x1, self.y1, self.direction]
             self.snake_List.append(snake_Head)
             if len(self.snake_List) > self.current_score:
                 del self.snake_List[0]
 
             # Check self collision
             for x in self.snake_List[:-1]:
-                if x == snake_Head:
+                if x[0] == snake_Head[0] and x[1] == snake_Head[1]:
                     self.reset_game()
                     return
 
@@ -101,20 +101,24 @@ class BackgroundGame:
         moves = []
         # Check if moves are valid (won't hit wall or self)
         # Left
-        if (self.x1 + SNAKE_BLOCK / 2 - SNAKE_BLOCK >= 0 and [self.x1 - SNAKE_BLOCK, self.y1] not in self.snake_List[:-1]
-                and current_direction != "RIGHT"):
+        if (self.x1 + SNAKE_BLOCK / 2 - SNAKE_BLOCK >= 0 and 
+            not any(x[0] == self.x1 - SNAKE_BLOCK and x[1] == self.y1 for x in self.snake_List[:-1])
+            and current_direction != "RIGHT"):
             moves.append("LEFT")
         # Right
-        if (self.x1 + SNAKE_BLOCK / 2 + SNAKE_BLOCK < WIDTH and [self.x1 + SNAKE_BLOCK, self.y1] not in self.snake_List[:-1]
-                and current_direction != "LEFT"):
+        if (self.x1 + SNAKE_BLOCK / 2 + SNAKE_BLOCK < WIDTH and 
+            not any(x[0] == self.x1 + SNAKE_BLOCK and x[1] == self.y1 for x in self.snake_List[:-1])
+            and current_direction != "LEFT"):
             moves.append("RIGHT")
         # Up
-        if (self.y1 + SNAKE_BLOCK / 2  - SNAKE_BLOCK >= 0 and [self.x1, self.y1 - SNAKE_BLOCK] not in self.snake_List[:-1]
-                and current_direction != "DOWN"):
+        if (self.y1 + SNAKE_BLOCK / 2  - SNAKE_BLOCK >= 0 and 
+            not any(x[0] == self.x1 and x[1] == self.y1 - SNAKE_BLOCK for x in self.snake_List[:-1])
+            and current_direction != "DOWN"):
             moves.append("UP")
         # Down
-        if (self.y1 + SNAKE_BLOCK / 2  + SNAKE_BLOCK < HEIGHT and [self.x1, self.y1 + SNAKE_BLOCK] not in self.snake_List[:-1]
-                and current_direction != "UP"):
+        if (self.y1 + SNAKE_BLOCK / 2  + SNAKE_BLOCK < HEIGHT and 
+            not any(x[0] == self.x1 and x[1] == self.y1 + SNAKE_BLOCK for x in self.snake_List[:-1])
+            and current_direction != "UP"):
             moves.append("DOWN")
 
         return moves if moves else ["LEFT", "RIGHT", "UP", "DOWN"]  # If no safe moves, return all (will die)
@@ -169,6 +173,5 @@ class BackgroundGame:
         # Draw snake
         snake_color = get_snake_color(self.current_score)
         near_food = is_near_food(self.x1, self.y1, self.foodx, self.foody)
-        draw_snake_head(self.screen, self.x1, self.y1, self.direction, snake_color, near_food)
-        for x in self.snake_List[:-1]:
-            pygame.draw.rect(self.screen, snake_color, [x[0], x[1], SNAKE_BLOCK, SNAKE_BLOCK])
+        draw_snake_head(self.screen, self.snake_List, near_food, snake_color, use_skin=False)
+        draw_snake_body(self.screen, self.snake_List, snake_color, use_skin=False)

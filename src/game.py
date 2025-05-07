@@ -15,6 +15,9 @@ class SnakeGame:
         self.ui_manager = UIManager(self.clock)
         self.pause_button = PauseButton(self.ui_manager)
         self.direction = "RIGHT"
+        
+        # 在游戏初始化后加载图片
+        load_body_images()
 
     def gameLoop(self):
         game_over = False
@@ -71,29 +74,37 @@ class SnakeGame:
                             if event.key == pygame.K_LEFT:
                                 x1_change = -SNAKE_BLOCK
                                 y1_change = 0
+                                self.direction = "LEFT"
                             elif event.key == pygame.K_RIGHT:
                                 x1_change = SNAKE_BLOCK
                                 y1_change = 0
+                                self.direction = "RIGHT"
                             elif event.key == pygame.K_UP:
                                 y1_change = -SNAKE_BLOCK
                                 x1_change = 0
+                                self.direction = "UP"
                             elif event.key == pygame.K_DOWN:
                                 y1_change = SNAKE_BLOCK
                                 x1_change = 0
+                                self.direction = "DOWN"
 
                     elif game_active and not paused and not game_close:
                         if event.key == pygame.K_LEFT and x1_change == 0:
                             x1_change = -SNAKE_BLOCK
                             y1_change = 0
+                            self.direction = "LEFT"
                         elif event.key == pygame.K_RIGHT and x1_change == 0:
                             x1_change = SNAKE_BLOCK
                             y1_change = 0
+                            self.direction = "RIGHT"
                         elif event.key == pygame.K_UP and y1_change == 0:
                             y1_change = -SNAKE_BLOCK
                             x1_change = 0
+                            self.direction = "UP"
                         elif event.key == pygame.K_DOWN and y1_change == 0:
                             y1_change = SNAKE_BLOCK
                             x1_change = 0
+                            self.direction = "DOWN"
                         elif event.key == pygame.K_c:
                             return self.gameLoop()
 
@@ -159,33 +170,22 @@ class SnakeGame:
             if food_should_draw:
                 pygame.draw.ellipse(self.screen, food_color, [foodx, foody, SNAKE_BLOCK, SNAKE_BLOCK])
 
-            snake_Head = [x1, y1]
+            snake_Head = [x1, y1, self.direction]
             snake_List.append(snake_Head)
             if len(snake_List) > Length_of_snake:
                 del snake_List[0]
 
             # collide itself
             for x in snake_List[:-1]:
-                if x == snake_Head:
+                if x[0] == snake_Head[0] and x[1] == snake_Head[1]:
                     save_game_result(current_score, elapsed_time, self.ui_manager.difficulty)
                     game_close = True
 
-            if x1_change > 0:
-                self.direction = "RIGHT"
-            elif x1_change < 0:
-                self.direction = "LEFT"
-            elif y1_change < 0:
-                self.direction = "UP"
-            elif y1_change > 0:
-                self.direction = "DOWN"
-
             snake_color = get_snake_color(current_score)
             near_food = is_near_food(x1, y1, foodx, foody)
-            draw_snake_head(self.screen, snake_Head[0], snake_Head[1],
-                          self.direction, snake_color, near_food)
-            for x in snake_List[:-1]:
-                pygame.draw.rect(self.screen, snake_color, [x[0], x[1], SNAKE_BLOCK, SNAKE_BLOCK])
-
+            draw_snake_head(self.screen, snake_List, near_food, snake_color, use_skin=False)
+            
+            draw_snake_body(self.screen, snake_List, snake_color, use_skin=False)
 
             if x1 == foodx and y1 == foody:
                 Length_of_snake += food_value
