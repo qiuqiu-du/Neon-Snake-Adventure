@@ -37,7 +37,7 @@ class SnakeGame:
         snake_List = []
         Length_of_snake = 1
 
-        foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time)
+        foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time, snake_List)
 
         self.ui_manager.show_start_screen(self.screen)
         high_score = load_high_score(self.ui_manager.difficulty)
@@ -161,7 +161,7 @@ class SnakeGame:
                     time_remaining = food_lifetime - (elapsed_time - food_spawn_time)
 
                     if time_remaining <= 0:
-                        foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time)
+                        foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time, snake_List)
                     elif time_remaining <= BLINK_START:
                         # Blink during last 3 seconds (toggle visibility every second)
                         food_should_draw = int(elapsed_time * 2) % 2 == 0
@@ -193,7 +193,7 @@ class SnakeGame:
                 if current_score > high_score:
                     high_score = current_score
                     new_record = True
-                foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time)
+                foodx, foody, food_color, food_value, food_spawn_time, food_lifetime = generate_food(elapsed_time, snake_List)
 
             time_text = self.ui_manager.small_font.render(f"Time: {int(elapsed_time)}s", True, WHITE)
             score_text = self.ui_manager.small_font.render(f"Score: {current_score}  High Score: {high_score}", True, WHITE)

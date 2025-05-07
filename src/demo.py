@@ -16,7 +16,7 @@ class BackgroundGame:
         self.update_interval = 1.0 / (EASY_SPEED if difficulty == "easy" else HARD_SPEED)
         self.last_direction_change = time.time()
         self.current_direction_duration = 0
-        self.min_direction_duration = 0.1  # Minimum time to keep same direction (seconds)
+        self.min_direction_duration = 0.05  # Minimum time to keep same direction (seconds)
 
     def reset_game(self):
         self.x1 = round(random.randrange(0, WIDTH - SNAKE_BLOCK) / SNAKE_BLOCK) * SNAKE_BLOCK
@@ -24,9 +24,10 @@ class BackgroundGame:
         self.x1_change = SNAKE_BLOCK
         self.y1_change = 0
         self.snake_List = []
+        self.length_of_snake = 1
         self.current_score = 0
         self.start_time = time.time()
-        self.foodx, self.foody, self.food_color, self.food_value, self.food_spawn_time, self.food_lifetime = generate_food(0)
+        self.foodx, self.foody, self.food_color, self.food_value, self.food_spawn_time, self.food_lifetime = generate_food(0, self.snake_List)
         self.direction = "RIGHT"
         self.game_active = True
         self.last_direction_change = time.time()
@@ -80,7 +81,7 @@ class BackgroundGame:
             # Update snake body
             snake_Head = [self.x1, self.y1, self.direction]
             self.snake_List.append(snake_Head)
-            if len(self.snake_List) > self.current_score:
+            if len(self.snake_List) > self.length_of_snake:
                 del self.snake_List[0]
 
             # Check self collision
@@ -92,10 +93,9 @@ class BackgroundGame:
             # Check food collision
             if self.x1 == self.foodx and self.y1 == self.foody:
                 self.current_score += self.food_value
+                self.length_of_snake += self.food_value
                 self.foodx, self.foody, self.food_color, self.food_value, self.food_spawn_time, self.food_lifetime = generate_food(
-                    time.time() - self.start_time)
-
-
+                    time.time() - self.start_time, self.snake_List)
 
     def get_possible_moves(self,current_direction):
         moves = []
