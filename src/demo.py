@@ -168,7 +168,7 @@ class BackgroundGame:
         self.screen.blit(overlay, (0, 0))
 
         # Draw food
-        pygame.draw.ellipse(self.screen, self.food_color, [self.foodx, self.foody, SNAKE_BLOCK, SNAKE_BLOCK])
+        pygame.draw.ellipse(self.screen, self.food_color, [self.foodx, self.foody, SNAKE_BLOCK/1.05, SNAKE_BLOCK/1.05])
 
         # Draw snake
         snake_color = get_snake_color(self.current_score)

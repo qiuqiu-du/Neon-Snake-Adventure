@@ -168,7 +168,7 @@ class SnakeGame:
 
             # Only draw food if it should be visible
             if food_should_draw:
-                pygame.draw.ellipse(self.screen, food_color, [foodx, foody, SNAKE_BLOCK, SNAKE_BLOCK])
+                pygame.draw.ellipse(self.screen, food_color, [foodx, foody, SNAKE_BLOCK/1.05, SNAKE_BLOCK/1.05])
 
             snake_Head = [x1, y1, self.direction]
             snake_List.append(snake_Head)
@@ -183,9 +183,9 @@ class SnakeGame:
 
             snake_color = get_snake_color(current_score)
             near_food = is_near_food(x1, y1, foodx, foody)
-            draw_snake_head(self.screen, snake_List, near_food, snake_color, use_skin=False)
+            draw_snake_head(self.screen, snake_List, near_food, snake_color, use_skin=True)
             
-            draw_snake_body(self.screen, snake_List, snake_color, use_skin=False)
+            draw_snake_body(self.screen, snake_List, snake_color, use_skin=True)
 
             if x1 == foodx and y1 == foody:
                 Length_of_snake += food_value

@@ -7,6 +7,7 @@ BODY_IMAGES = {
     'straight': None,
     'turn': None,
     'tail': None,
+    'tail-curled': None,  # 蜷缩的尾巴图片
     'head-mo': None,  # 张嘴的头部图片
     'head-mc': None   # 闭嘴的头部图片
 }
@@ -17,18 +18,21 @@ def load_body_images():
         straight = pygame.image.load(os.path.join('assets', 'body', 'straight.png'))
         turn = pygame.image.load(os.path.join('assets', 'body', 'turn.png'))
         tail = pygame.image.load(os.path.join('assets', 'body', 'tail.png'))
+        tail_curled = pygame.image.load(os.path.join('assets', 'body', 'tail-curled.png'))
         head_mo = pygame.image.load(os.path.join('assets', 'body', 'head-mo.png'))
         head_mc = pygame.image.load(os.path.join('assets', 'body', 'head-mc.png'))
         
         straight = pygame.transform.scale(straight, (SNAKE_BLOCK, SNAKE_BLOCK))
         turn = pygame.transform.scale(turn, (SNAKE_BLOCK, SNAKE_BLOCK))
         tail = pygame.transform.scale(tail, (SNAKE_BLOCK, SNAKE_BLOCK))
+        tail_curled = pygame.transform.scale(tail_curled, (SNAKE_BLOCK, SNAKE_BLOCK))
         head_mo = pygame.transform.scale(head_mo, (SNAKE_BLOCK, SNAKE_BLOCK))
         head_mc = pygame.transform.scale(head_mc, (SNAKE_BLOCK, SNAKE_BLOCK))
-        
+
         BODY_IMAGES['straight'] = straight.convert_alpha()
         BODY_IMAGES['turn'] = turn.convert_alpha()
         BODY_IMAGES['tail'] = tail.convert_alpha()
+        BODY_IMAGES['tail-curled'] = tail_curled.convert_alpha()
         BODY_IMAGES['head-mo'] = head_mo.convert_alpha()
         BODY_IMAGES['head-mc'] = head_mc.convert_alpha()
     except Exception as e:
@@ -156,6 +160,8 @@ def draw_snake_head(screen, snake_list, near_food, color, use_skin=True):
         # 使用图片资源
         image = BODY_IMAGES['head-mo'] if near_food else BODY_IMAGES['head-mc']
         angle = get_rotation_angle(direction)
+        if direction == 'LEFT':
+            image = pygame.transform.flip(image, False, True)
         rotated_image = pygame.transform.rotate(image, angle)
         screen.blit(rotated_image, (x, y))
 
@@ -237,5 +243,11 @@ def draw_snake_body(screen, snake_list, color, use_skin=True):
             tail_angle = get_rotation_angle(tail_direction)
         else:
             tail_angle = get_rotation_angle(next_direction)
-        rotated_tail = pygame.transform.rotate(BODY_IMAGES['tail'], tail_angle)
+            
+        # 根据时间交替显示伸直和蜷缩的尾巴
+        current_time = pygame.time.get_ticks()
+        is_curled = (current_time // 500) % 2 == 0  # 每0.5秒切换一次
+        
+        tail_image = BODY_IMAGES['tail-curled'] if is_curled else BODY_IMAGES['tail']
+        rotated_tail = pygame.transform.rotate(tail_image, tail_angle)
         screen.blit(rotated_tail, (tail_pos[0], tail_pos[1]))
