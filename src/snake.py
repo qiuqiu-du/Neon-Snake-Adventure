@@ -15,12 +15,13 @@ BODY_IMAGES = {
 def load_body_images():
     """加载蛇身体图片资源"""
     try:
-        straight = pygame.image.load(os.path.join('assets', 'body', 'straight.png'))
-        turn = pygame.image.load(os.path.join('assets', 'body', 'turn.png'))
-        tail = pygame.image.load(os.path.join('assets', 'body', 'tail.png'))
-        tail_curled = pygame.image.load(os.path.join('assets', 'body', 'tail-curled.png'))
-        head_mo = pygame.image.load(os.path.join('assets', 'body', 'head-mo.png'))
-        head_mc = pygame.image.load(os.path.join('assets', 'body', 'head-mc.png'))
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        straight = pygame.image.load(os.path.join(base_path, 'assets', 'body', 'straight.png'))
+        turn = pygame.image.load(os.path.join(base_path,'assets', 'body', 'turn.png'))
+        tail = pygame.image.load(os.path.join(base_path,'assets', 'body', 'tail.png'))
+        tail_curled = pygame.image.load(os.path.join(base_path,'assets', 'body', 'tail-curled.png'))
+        head_mo = pygame.image.load(os.path.join(base_path,'assets', 'body', 'head-mo.png'))
+        head_mc = pygame.image.load(os.path.join(base_path,'assets', 'body', 'head-mc.png'))
         
         straight = pygame.transform.scale(straight, (SNAKE_BLOCK, SNAKE_BLOCK))
         turn = pygame.transform.scale(turn, (SNAKE_BLOCK, SNAKE_BLOCK))
